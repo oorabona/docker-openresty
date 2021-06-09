@@ -37,10 +37,15 @@ esac
 
 source "./helpers/git-tags"
 
-if [ "$VERSION" == "latest" ]; then
-  TAG=$(git-latest-tag openresty openresty | cut -c2-)
+if [[ -z "$TAG" ]]; then
+  echo "User did not provide any tag, try to guess it."
+  if [ "$VERSION" == "latest" ]; then
+    TAG=$(git-latest-tag openresty openresty | cut -c2-)
+  else
+    TAG=$(git-check-tag openresty openresty ${VERSION} | cut -c2-)
+  fi
 else
-  TAG=$(git-check-tag openresty openresty ${VERSION} | cut -c2-)
+  echo "Using user provided tag: $TAG"
 fi
 
 NPROC=$(nproc)
@@ -53,7 +58,7 @@ do
 
   pushd $os
 
-  if [[ -e "$FLAVORS" ]]; then
+  if [ -z "$FLAVORS" ]; then
     flavors=$(ls -1 *.dockerfile|cut -d'.' -f1)
   else
     flavors=$(echo $FLAVORS|tr ',' ' ')
