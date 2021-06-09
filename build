@@ -18,6 +18,7 @@ case "$#" in
   "2" )
     OS=$1
     FLAVORS=$2
+    ;;
   "3" )
     OS=$1
     FLAVORS=$2
