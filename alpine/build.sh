@@ -1,3 +1,4 @@
+#!/bin/sh
 # STEP 1 - Bootstrap : download and build prerequisites
 apk add --no-cache --virtual .build-deps \
   coreutils \

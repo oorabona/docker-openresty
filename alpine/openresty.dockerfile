@@ -76,7 +76,7 @@ LABEL resty_eval_post_make="${RESTY_EVAL_POST_MAKE}"
 LABEL luarocks_version="${LUAROCKS_VERSION}"
 
 COPY build.sh /
-RUN build.sh && rm -rf build.sh
+RUN chmod +x build.sh && ./build.sh && rm -rf build.sh
 
 # Add additional binaries into PATH for convenience
 ENV PATH=$PATH:/usr/local/openresty/luajit/bin:/usr/local/openresty/nginx/sbin:/usr/local/openresty/bin
