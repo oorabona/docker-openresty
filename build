@@ -42,9 +42,9 @@ do
     if [[ "$VERSION" == "latest" ]]; then
       TAG_LATEST="-t oorabona/${flavor}:latest"
     fi
-    
+
     echo "Building image '$flavor' ..."
-    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${VERSION:latest} --platform=linux/arm/v7,linux/amd64 -f ${flavor}.dockerfile -t oorabona/${flavor}:${TAG} ${TAG_LATEST} .
+    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --platform=linux/arm/v7,linux/amd64 -f ${flavor}.dockerfile -t oorabona/${flavor}:${TAG} ${TAG_LATEST} .
   done
 
   docker buildx rm builder
