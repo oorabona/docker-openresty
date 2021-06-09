@@ -17,11 +17,8 @@ case "$#" in
     exit 0
 esac
 
-<<<<<<< HEAD
 source "./helpers/git-tags"
 
-=======
->>>>>>> 8e2c767787040d956fd7a0a3a6ea7ba69bbb2cc5
 if [ "$VERSION" == "latest" ]; then
   TAG=$(git-latest-tag openresty openresty | cut -c2-)
 else
@@ -30,11 +27,6 @@ fi
 
 echo "Build version $VERSION ($TAG) for $OS"
 
-<<<<<<< HEAD
-=======
-source "./helpers/git-tags"
-
->>>>>>> 8e2c767787040d956fd7a0a3a6ea7ba69bbb2cc5
 for os in $(echo $OS|tr ',' ' ')
 do
   echo "Currently building with this base image : $os ..."
@@ -50,11 +42,7 @@ do
     if [[ "$VERSION" == "latest" ]]; then
       TAG_LATEST="-t oorabona/${flavor}:latest"
     fi
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 8e2c767787040d956fd7a0a3a6ea7ba69bbb2cc5
     echo "Building image '$flavor' ..."
     docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${VERSION:latest} --platform=linux/arm/v7,linux/amd64 -f ${flavor}.dockerfile -t oorabona/${flavor}:${TAG} ${TAG_LATEST} .
   done
