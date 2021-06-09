@@ -1,0 +1,48 @@
+#!/bin/bash
+case "$#" in
+  "0" )
+    VERSION=latest
+    OS=alpine
+    ;;
+  "1" )
+    VERSION=latest
+    OS=$1
+    ;;
+  "2" )
+    VERSION=$2
+    OS=$1
+    ;;
+  * )
+    echo "Wrong number of arguments."
+    exit 0
+esac
+
+echo "Build version $VERSION for $OS"
+
+source "./helpers/git-tags"
+
+if [ "$VERSION" == "latest" ]; then
+  git-latest-tag openresty openresty | cut -c2-
+else
+  git-check-tag openresty openresty ${VERSION} | cut -c2-
+fi
+
+for os in $(echo $OS|tr ',' ' ')
+do
+  echo "Currently building with this base image : $os ..."
+
+  pushd $os
+  docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+  docker buildx create --name builder --driver docker-container --use
+  docker buildx inspect --bootstrap
+
+  for flavor in $(ls -1 *.dockerfile|cut -d'.' -f1)
+  do
+    echo "Building image '$flavor' ..."
+    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${VERSION:latest} --platform=linux/arm/v7,linux/amd64 -f ${flavor}.dockerfile -t oorabona/${flavor}:${VERSION} -t oorabona/openresty-http-connect:latest .
+  done
+
+  docker buildx rm builder
+  popd
+
+done
