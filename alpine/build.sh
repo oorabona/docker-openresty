@@ -1,4 +1,6 @@
 #!/bin/sh
+set -ex
+
 # STEP 1 - Bootstrap : download and build prerequisites
 apk add --no-cache --virtual .build-deps \
   coreutils \
@@ -68,7 +70,7 @@ cd /tmp
 curl -fSL https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o openresty-${RESTY_VERSION}.tar.gz
 tar xzf openresty-${RESTY_VERSION}.tar.gz
 cd /tmp/openresty-${RESTY_VERSION}
-eval ./configure ${_RESTY_CONFIG_DEPS} ${RESTY_CONFIG_OPTIONS} ${RESTY_CONFIG_OPTIONS_MORE} ${RESTY_LUAJIT_OPTIONS}
+eval ./configure -j${RESTY_J} ${_RESTY_CONFIG_DEPS} ${RESTY_CONFIG_OPTIONS} ${RESTY_CONFIG_OPTIONS_MORE} ${RESTY_LUAJIT_OPTIONS}
 cd /tmp/openresty-${RESTY_VERSION}
 make -j${RESTY_J}
 make -j${RESTY_J} install
