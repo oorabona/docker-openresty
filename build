@@ -25,7 +25,9 @@ else
   TAG=$(git-check-tag openresty openresty ${VERSION} | cut -c2-)
 fi
 
-echo "Build version $VERSION ($TAG) for $OS"
+NPROC=$(nproc)
+
+echo "Build version $VERSION ($TAG) for $OS (building with $NPROC processors)"
 
 for os in $(echo $OS|tr ',' ' ')
 do
