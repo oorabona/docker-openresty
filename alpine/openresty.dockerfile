@@ -75,7 +75,7 @@ LABEL resty_eval_pre_configure="${RESTY_EVAL_PRE_CONFIGURE}"
 LABEL resty_eval_post_make="${RESTY_EVAL_POST_MAKE}"
 LABEL luarocks_version="${LUAROCKS_VERSION}"
 
-COPY build.sh /
+COPY build-openresty.sh /build.sh
 RUN chmod +x build.sh && ./build.sh && rm -rf build.sh
 
 # Add additional binaries into PATH for convenience
