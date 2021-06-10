@@ -8,12 +8,12 @@ on:
   push:
     branches: [ main ]
     paths:
-      - alpine
+      - alpine/*
 
   pull_request:
     branches: [ main ]
     paths:
-      - alpine
+      - alpine/*
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
