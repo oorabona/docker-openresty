@@ -1,5 +1,5 @@
 # Dockerfile - alpine
-# https://github.com/openresty/docker-openresty
+# https://github.com/oorabona/docker-openresty
 
 ARG RESTY_IMAGE_BASE="alpine"
 ARG RESTY_IMAGE_TAG="3.13"
