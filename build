@@ -52,6 +52,10 @@ NPROC=$(nproc)
 
 echo "Build version $VERSION ($TAG) for $OS (building with $NPROC processors)"
 
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+docker buildx create --name builder --driver docker-container --use
+docker buildx inspect --bootstrap
+
 for os in $(echo $OS|tr ',' ' ')
 do
   echo "Currently building with this base image : $os ..."
@@ -64,10 +68,6 @@ do
     flavors=$(echo $FLAVORS|tr ',' ' ')
   fi
 
-  docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-  docker buildx create --name builder --driver docker-container --use
-  docker buildx inspect --bootstrap
-
   for flavor in ${flavors}
   do
     TAG_LATEST=''
@@ -79,10 +79,11 @@ do
     docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --platform=${PLATFORMS} -f ${flavor}.dockerfile -t oorabona/${flavor}:${TAG} ${TAG_LATEST} .
   done
 
-  docker buildx rm builder
   popd
 
 done
+
+docker buildx rm builder
 
 echo "Completed build !"
 exit 0
