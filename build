@@ -72,11 +72,11 @@ do
   do
     TAG_LATEST=''
     if [[ "$VERSION" == "latest" ]]; then
-      TAG_LATEST="-t oorabona/${flavor}:latest"
+      TAG_LATEST="-t oorabona/${flavor}:latest-${os}"
     fi
 
     echo "Building image '$flavor' ..."
-    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --platform=${PLATFORMS} -f ${flavor}.dockerfile -t oorabona/${flavor}:${TAG} ${TAG_LATEST} .
+    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --platform=${PLATFORMS} -f ${flavor}.dockerfile -t oorabona/${flavor}:${TAG}-${os} ${TAG_LATEST} .
   done
 
   popd
