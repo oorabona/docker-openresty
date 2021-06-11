@@ -10,6 +10,7 @@ install_prereq () {
     perl-dev \
     readline-dev \
     zlib-dev \
+    git \
     ${RESTY_ADD_PACKAGE_BUILDDEPS}
   apk add --no-cache \
     build-base \
@@ -93,6 +94,7 @@ install_luarocks () {
 
 set -ex
 
+# STEP 1 - Download and install prerequisites
 install_prereq
 
 cd /tmp
@@ -101,6 +103,7 @@ then
   eval $(echo ${RESTY_EVAL_PRE_CONFIGURE})
 fi
 
+# STEP 2 - Build required software
 install_openssl
 install_pcre
 install_openresty
@@ -112,9 +115,11 @@ then
   eval $(echo ${RESTY_EVAL_POST_MAKE})
 fi
 
-rm -rf openssl* pcre* openresty* lua* luarocks* ngx*
+# STEP 3 - Remove no longer needed packages, sources and installed packages
+rm -rf /tmp/*
 apk del .build-deps
 
+# STEP 4 - Finish installation
 mkdir -p /var/run/openresty
 ln -sf /dev/stdout /usr/local/openresty/nginx/logs/access.log
 ln -sf /dev/stderr /usr/local/openresty/nginx/logs/error.log

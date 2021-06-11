@@ -95,13 +95,9 @@ install_luarocks () {
   make -j${RESTY_J} install
 }
 
-remove_prereq () {
-  apk del .build-deps
-}
-
 set -ex
 
-# STEP 1 - Download and build prerequisites
+# STEP 1 - Download and install prerequisites
 install_prereq
 
 cd /tmp
@@ -110,7 +106,7 @@ then
   eval $(echo ${RESTY_EVAL_PRE_CONFIGURE})
 fi
 
-# STEP 2 - Install required software
+# STEP 2 - Build required software
 install_openssl
 install_pcre
 install_openresty
@@ -123,9 +119,8 @@ then
 fi
 
 # STEP 3 - Remove no longer needed packages, sources and installed packages
-rm -rf openssl* pcre* openresty* lua* luarocks* ngx*
-
-remove_prereq
+rm -rf /tmp/*
+apk del .build-deps
 
 # STEP 4 - Finish installation
 mkdir -p /var/run/openresty
