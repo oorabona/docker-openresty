@@ -119,6 +119,11 @@ install_modsecurity () {
   ln -s /usr/local/modsecurity/lib/libmodsecurity.so.3 /usr/local/lib/libmodsecurity.so.3
 }
 
+install_brotli () {
+  cd /tmp
+  git clone --recursive https://github.com/google/ngx_brotli.git
+}
+
 set -ex
 
 # STEP 1 - Download and install prerequisites
@@ -134,6 +139,7 @@ fi
 install_openssl
 install_pcre
 install_modsecurity
+install_brotli
 install_openresty
 install_luarocks
 

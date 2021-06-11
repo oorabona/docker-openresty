@@ -92,6 +92,11 @@ install_luarocks () {
   make -j${RESTY_J} install
 }
 
+install_brotli () {
+  cd /tmp
+  git clone --recursive https://github.com/google/ngx_brotli.git
+}
+
 set -ex
 
 # STEP 1 - Download and install prerequisites
@@ -106,6 +111,7 @@ fi
 # STEP 2 - Build required software
 install_openssl
 install_pcre
+install_brotli
 install_openresty
 install_luarocks
 
