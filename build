@@ -50,7 +50,7 @@ else
   echo "Using user provided tag: $TAG"
 fi
 
-NPROC=$(nproc)
+NPROC=${NPROC:-$(nproc)}
 
 echo "Build version $VERSION ($TAG) for $OS (building with $NPROC processors)"
 
