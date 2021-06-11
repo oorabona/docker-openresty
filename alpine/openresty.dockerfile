@@ -9,6 +9,7 @@ FROM ${RESTY_IMAGE_BASE}:${RESTY_IMAGE_TAG}
 LABEL maintainer="Olivier Orabona <olivier.orabona@gmail.com>"
 
 # Docker Build Arguments
+ARG RESTY_FLAVOR="base"
 ARG RESTY_VERSION="1.19.3.1"
 ARG RESTY_OPENSSL_VERSION="1.1.1k"
 ARG RESTY_OPENSSL_PATCH_VERSION="1.1.1f"
@@ -75,7 +76,7 @@ LABEL resty_eval_pre_configure="${RESTY_EVAL_PRE_CONFIGURE}"
 LABEL resty_eval_post_make="${RESTY_EVAL_POST_MAKE}"
 LABEL luarocks_version="${LUAROCKS_VERSION}"
 
-COPY build-openresty.sh /build.sh
+COPY build-openresty-${RESTY_FLAVOR}.sh /build.sh
 RUN chmod +x build.sh && ./build.sh && rm -rf build.sh
 
 # Add additional binaries into PATH for convenience

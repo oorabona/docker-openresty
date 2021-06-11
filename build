@@ -63,7 +63,7 @@ do
   pushd $os
 
   if [ -z "$FLAVORS" ]; then
-    flavors=$(ls -1 *.dockerfile|cut -d'.' -f1)
+    flavors=$(ls -1 *.sh|cut -d'.' -f1|sed 's/build-openresty-//g')
   else
     flavors=$(echo $FLAVORS|tr ',' ' ')
   fi
@@ -76,7 +76,7 @@ do
     fi
 
     echo "Building image '$flavor' ..."
-    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --platform=${PLATFORMS} -f ${flavor}.dockerfile -t oorabona/${flavor}:${TAG}-${os} ${TAG_LATEST} .
+    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --buld-arg FLAVOR=${flavor} --platform=${PLATFORMS} -f openresty.dockerfile -t oorabona/${flavor}:${TAG}-${os} ${TAG_LATEST} .
   done
 
   popd
