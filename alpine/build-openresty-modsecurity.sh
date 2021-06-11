@@ -115,6 +115,7 @@ install_modsecurity () {
   ./configure --with-pcre=/usr/local/openresty/pcre
   make -j${RESTY_J}
   make -j${RESTY_J} install
+  strip /usr/local/modsecurity/bin/* /usr/local/modsecurity/lib/*.a /usr/local/modsecurity/lib/*.so*
 }
 
 set -ex
