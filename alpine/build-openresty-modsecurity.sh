@@ -116,6 +116,7 @@ install_modsecurity () {
   make -j${RESTY_J}
   make -j${RESTY_J} install
   strip /usr/local/modsecurity/bin/* /usr/local/modsecurity/lib/*.a /usr/local/modsecurity/lib/*.so*
+  ln -s /usr/local/modsecurity/lib/libmodsecurity.so.3 /usr/local/lib/libmodsecurity.so.3
 }
 
 set -ex
