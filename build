@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
 VERSION=latest
-FLAVORS=
+FLAVORS=all
 PLATFORMS=linux/arm/v7,linux/amd64
 
 case "$#" in
   "0" )
     echo -e "$(basename $0) <OSes> [flavors] [version] [platforms]\n"
     echo "OSes, flavors and platforms must be separated by commas."
+    echo "If you want to specify version and/or platforms and you want to build all flavors, use 'all'."
     echo "If not specified, default version is 'latest'."
     echo "If not specified, all flavors for a specific OS are built."
+    echo "If not specified, $(echo "${PLATFORMS%,*} and ${PLATFORMS##*,}") are built, 'all' is accepted."
     exit 1
     ;;
   "1" )
@@ -62,7 +64,7 @@ do
 
   pushd $os
 
-  if [ -z "$FLAVORS" ]; then
+  if [ "$FLAVORS" == "all" ]; then
     flavors=$(ls -1 *.sh|cut -d'.' -f1|sed 's/build-openresty-//g')
   else
     flavors=$(echo $FLAVORS|tr ',' ' ')
