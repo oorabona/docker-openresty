@@ -9,6 +9,7 @@ install_prereq () {
     perl-dev \
     readline-dev \
     zlib-dev \
+    git \
     ${RESTY_ADD_PACKAGE_BUILDDEPS}
   apk add --no-cache \
     build-base \
