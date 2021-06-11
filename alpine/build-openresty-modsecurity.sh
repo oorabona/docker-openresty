@@ -4,7 +4,7 @@
 install_prereq () {
   apk add --no-cache --virtual .build-deps \
     flex bison \
-    yajl yajl-dev \
+    yajl-dev \
     autoconf \
     libtool \
     automake \
@@ -17,6 +17,7 @@ install_prereq () {
     perl-dev \
     readline-dev \
     zlib-dev \
+    linux-headers \
     git \
     ${RESTY_ADD_PACKAGE_BUILDDEPS}
   apk add --no-cache \
@@ -27,8 +28,8 @@ install_prereq () {
     libxslt \
     zlib \
     curl \
+    yajl \
     libintl \
-    linux-headers \
     make \
     musl \
     outils-md5 \
