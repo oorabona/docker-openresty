@@ -72,7 +72,7 @@ do
   do
     TAG_LATEST=''
     if [[ "$VERSION" == "latest" ]]; then
-      TAG_LATEST="-t oorabona/${flavor}:latest-${os}"
+      TAG_LATEST="-t oorabona/openresty-${flavor}:latest-${os}"
     fi
 
     echo "Building image '$flavor' ..."
