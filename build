@@ -76,7 +76,7 @@ do
     fi
 
     echo "Building image '$flavor' ..."
-    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --buld-arg FLAVOR=${flavor} --platform=${PLATFORMS} -f openresty.dockerfile -t oorabona/${flavor}:${TAG}-${os} ${TAG_LATEST} .
+    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --build-arg FLAVOR=${flavor} --platform=${PLATFORMS} -f openresty.dockerfile -t oorabona/${flavor}:${TAG}-${os} ${TAG_LATEST} .
   done
 
   popd
