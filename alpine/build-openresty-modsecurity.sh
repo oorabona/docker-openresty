@@ -18,9 +18,9 @@ install_prereq () {
     readline-dev \
     zlib-dev \
     linux-headers \
-    git \
     ${RESTY_ADD_PACKAGE_BUILDDEPS}
   apk add --no-cache \
+    git \
     build-base \
     gd \
     geoip \
