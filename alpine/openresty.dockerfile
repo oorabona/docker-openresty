@@ -63,6 +63,7 @@ ARG _RESTY_CONFIG_DEPS="--with-pcre \
 
 # For Luarocks
 ARG LUAROCKS_VERSION="3.3.1"
+LABEL resty_flavor="${RESTY_FLAVOR}"
 LABEL resty_image_base="${RESTY_IMAGE_BASE}"
 LABEL resty_image_tag="${RESTY_IMAGE_TAG}"
 LABEL resty_version="${RESTY_VERSION}"
