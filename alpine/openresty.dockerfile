@@ -45,6 +45,7 @@ ARG RESTY_CONFIG_OPTIONS="\
     --with-sha1-asm \
     --with-stream \
     --with-stream_ssl_module \
+    --with-stream_realip_module \
     --with-threads \
     "
 ARG RESTY_CONFIG_OPTIONS_MORE="--add-module=/tmp/ngx_brotli"
