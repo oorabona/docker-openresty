@@ -27,6 +27,7 @@ install_prereq () {
     outils-md5 \
     perl \
     unzip \
+    libmaxminddb \
     ${RESTY_ADD_PACKAGE_RUNDEPS}
 }
 
