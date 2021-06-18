@@ -42,12 +42,17 @@ source "./helpers/git-tags"
 if [[ -z "$TAG" ]]; then
   echo "User did not provide any tag, try to guess it."
   if [ "$VERSION" == "latest" ]; then
-    TAG=$(git-latest-tag openresty openresty | cut -c2-)
+    TAG=$(git_latest_tag openresty openresty | cut -c2-)
   else
-    TAG=$(git-check-tag openresty openresty ${VERSION} | cut -c2-)
+    TAG=$(git_check_tag openresty openresty ${VERSION} | cut -c2-)
   fi
 else
   echo "Using user provided tag: $TAG"
+fi
+
+if [[ -z "$TAG" ]]; then
+  echo "No tag or branch found. Aborting."
+  exit 1
 fi
 
 NPROC=${NPROC:-$(nproc)}
