@@ -1,0 +1,49 @@
+#!/bin/sh
+
+git_latest_tag () {
+  echo $(git ls-remote --tags --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | grep -Po "v\d+(\.\d+)+$" | tail -n1 | sed 's@.*/@@; s@\^{}@@')
+}
+
+git_check_tag () {
+  git ls-remote --tags --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | grep -Po "v\d+(\.\d+)+$" | grep $3 | sed 's@.*/@@; s@\^{}@@'
+}
+
+git_latest_branch () {
+  echo $(git ls-remote --heads --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | perl -ne 'print if /refs\/heads\/(.+)+$/' | tail -n1 | sed 's@^.*refs/heads/@@')
+}
+
+git_check_branch () {
+  git ls-remote --heads --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | perl -ne 'print if /refs\/heads\/(.+)+$/' | tail -n1 | sed 's@^.*refs/heads/@@'
+}
+
+set -ex
+
+cd /tmp/conf
+envsubst < nginx.conf > ${RESTY_CONFIG_PATH}/nginx.conf
+mv conf.d ${RESTY_CONFIG_PATH}/conf.d
+mkdir -p ${RESTY_CONFIG_PATH}/sites-enabled
+envsubst < sites-enabled/default-${RESTY_FLAVOR}.conf > ${RESTY_CONFIG_PATH}/sites-enabled/default.conf
+mv modsecurity.d ${RESTY_CONFIG_PATH}/modsecurity.d
+
+cd ${RESTY_CONFIG_PATH}/modsecurity.d
+
+if [[ -z "$RESTY_MODSECURITY_VERSION" ]]; then
+  # We are looking for the latest branch
+  RESTY_MODSECURITY_VERSION=$(git_latest_branch coreruleset coreruleset)
+elif [[ "$RESTY_MODSECURITY_VERSION" == "latest" ]]; then
+  # We are looking for the latest tag (version)
+  RESTY_MODSECURITY_VERSION=$(git_latest_tag coreruleset coreruleset)
+else
+  # Use the user provided version (or branch) as it is
+  echo "Using provided ModSecurity version ${RESTY_MODSECURITY_VERSION}"
+fi
+
+curl -fSL https://github.com/coreruleset/coreruleset/tarball/${RESTY_MODSECURITY_VERSION} | tar zxvf -
+
+mv coreruleset-* owasp-modsecurity-crs
+cd owasp-modsecurity-crs
+mv crs-setup.conf.example crs-setup.conf
+mv rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
+mv rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf.example rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf
+
+rm -rf /tmp/conf

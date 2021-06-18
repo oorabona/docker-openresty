@@ -1,15 +1,36 @@
 #!/usr/bin/env bash
 
-git-latest-tag() {
-  echo $(git ls-remote --tags --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | grep -Po "v\d+(\.\d+)+$" | tail -n1 | sed 's/.*\///; s/\^{}//')
+git_latest_tag() {
+  echo $(git ls-remote --tags --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | perl -ne 'print if /v\d+(\.\d+)+$/' | tail -n1 | sed 's@.*/@@; s@\^{}@@')
 }
 
-git-check-tag() {
-  git ls-remote --tags --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | grep -Po "v\d+(\.\d+)+$" | grep $3 | sed 's/.*\///; s/\^{}//'
+git_check_tag() {
+  git ls-remote --tags --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | perl -ne 'print if /v\d+(\.\d+)+$/' | grep $3 | sed 's@.*/@@; s@\^{}@@'
+}
+
+git_latest_branch () {
+  echo $(git ls-remote --heads --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | perl -ne 'print if /refs\/heads\/(.+)+$/' | tail -n1 | sed 's@^.*refs/heads/@@')
+}
+
+git_check_branch () {
+  git ls-remote --heads --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | grep $3 | sed 's@^.*refs/heads/@@'
 }
 
 # Entrypoint in case this script is run directly.
-if [[ "$0" == *"git-tags" ]]
-then
-  git-tags "$@"
-fi
+case "$(basename $0)" in
+  "git_check_tag" )
+    git_check_tag "$@"
+    ;;
+  "git_latest_tag" )
+    git_latest_tag "$@"
+    ;;
+  "git_check_branch" )
+    git_check_branch "$@"
+    ;;
+  "git_latest_branch" )
+    git_latest_branch "$@"
+    ;;
+  * )
+    # Do *NOT* output any error or usage, assume it is source-d from another script
+    ;;
+esac

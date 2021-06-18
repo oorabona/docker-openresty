@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -ex
+
+cd /tmp/conf
+envsubst < nginx.conf > ${RESTY_CONFIG_PATH}/nginx.conf
+mv conf.d ${RESTY_CONFIG_PATH}/conf.d
+mkdir -p ${RESTY_CONFIG_PATH}/sites-enabled
+mv sites-enabled/default-${RESTY_FLAVOR}.conf ${RESTY_CONFIG_PATH}/sites-enabled/default.conf
+
+rm -rf /tmp/conf
