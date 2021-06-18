@@ -67,10 +67,8 @@ for os in $(echo $OS|tr ',' ' ')
 do
   echo "Currently building with this base image : $os ..."
 
-  pushd $os
-
   if [ "$FLAVORS" == "all" ]; then
-    flavors=$(ls -1 *.sh|cut -d'.' -f1|sed 's/build-openresty-//g')
+    flavors=$(grep -Po "AS openresty-\K[a-z]+$" ${os}.dockerfile)
   else
     flavors=$(echo $FLAVORS|tr ',' ' ')
   fi
@@ -79,14 +77,12 @@ do
   do
     TAG_LATEST=''
     if [[ "$VERSION" == "latest" ]]; then
-      TAG_LATEST="-t oorabona/openresty-${flavor}:latest-${os}"
+      TAG_LATEST="-t oorabona/openresty-${flavor}-${os}:latest"
     fi
 
     echo "Building image '$flavor' ..."
-    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --build-arg RESTY_FLAVOR=${flavor} --platform=${PLATFORMS} -f openresty.dockerfile -t oorabona/openresty-${flavor}:${TAG}-${os} ${TAG_LATEST} .
+    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --build-arg RESTY_FLAVOR=${flavor} --platform=${PLATFORMS} -f ${os}.dockerfile -t oorabona/openresty-${flavor}-${os}:${TAG} ${TAG_LATEST} .
   done
-
-  popd
 
 done
 
