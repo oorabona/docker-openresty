@@ -16,30 +16,11 @@ COPY helpers/install-${RESTY_FLAVOR} /usr/local/bin/install-openresty
 
 RUN  apk add --no-cache gettext \
   && /usr/local/bin/install-openresty \
-  && rm -f /usr/local/bin/install-openresty
-
-FROM ${RESTY_IMAGE_BASE}:${RESTY_IMAGE_TAG}
-
-ARG RESTY_ADD_PACKAGE_RUNDEPS=""
-
-RUN   apk add --no-cache \
-      binutils \
-      gd \
-      geoip \
-      libgcc \
-      libxslt \
-      zlib \
-      curl \
-      yajl \
-      libintl \
-      musl \
-      outils-md5 \
-      perl \
-      unzip \
-      libmaxminddb \
-      ${RESTY_ADD_PACKAGE_RUNDEPS} \
+  && rm -f /usr/local/bin/install-openresty \
   &&  mkdir -p /var/run/openresty ${RESTY_CONFIG_PATH} \
   &&  echo ok
+
+FROM oorabona/openresty-${RESTY_FLAVOR}:${RESTY_VERSION}-${RESTY_IMAGE_BASE}
 
 COPY --from=base /usr/local /usr/local
 COPY --from=base ${RESTY_CONFIG_PATH} ${RESTY_CONFIG_PATH}
