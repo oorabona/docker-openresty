@@ -55,9 +55,13 @@ if [[ -z "$TAG" ]]; then
   exit 1
 fi
 
+if [ "$HARDENED" == "1" ]; then
+  hardened=hardened-
+fi
+
 NPROC=${NPROC:-$(nproc)}
 
-echo "Build version $VERSION ($TAG) for $OS (building with $NPROC processors)"
+echo "Build ${hardened}openresty version $VERSION ($TAG) for $OS (building with $NPROC processors)"
 
 docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
 docker buildx create --name builder --driver docker-container --use
@@ -77,14 +81,14 @@ do
   do
     TAG_LATEST=''
     if [[ "$VERSION" == "latest" ]]; then
-      TAG_LATEST="-t oorabona/openresty-${flavor}:latest-${os}"
+      TAG_LATEST="-t oorabona/openresty-${hardened}${flavor}:latest-${os}"
       if [[ "$os" == "alpine" ]]; then
-        TAG_LATEST="${TAG_LATEST} -t oorabona/openresty-${flavor}:latest"
+        TAG_LATEST="${TAG_LATEST} -t oorabona/openresty-${hardened}${flavor}:latest"
       fi
     fi
 
-    echo "Building image '$flavor' ..."
-    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --build-arg RESTY_FLAVOR=${flavor} --platform=${PLATFORMS} -f ${os}.dockerfile -t oorabona/openresty-${flavor}:${TAG}-${os} ${TAG_LATEST} .
+    echo "Building image '${hardened}$flavor' ..."
+    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --build-arg RESTY_FLAVOR=${flavor} --platform=${PLATFORMS} -f ${hardened}${os}.dockerfile -t oorabona/openresty-${hardened}${flavor}:${TAG}-${os} ${TAG_LATEST} .
   done
 
 done
