@@ -1,20 +1,6 @@
 #!/bin/sh
 
-git_latest_tag () {
-  echo $(git ls-remote --tags --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | grep -Po "v\d+(\.\d+)+$" | tail -n1 | sed 's@.*/@@; s@\^{}@@')
-}
-
-git_check_tag () {
-  git ls-remote --tags --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | grep -Po "v\d+(\.\d+)+$" | grep $3 | sed 's@.*/@@; s@\^{}@@'
-}
-
-git_latest_branch () {
-  echo $(git ls-remote --heads --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | perl -ne 'print if /refs\/heads\/(.+)+$/' | tail -n1 | sed 's@^.*refs/heads/@@')
-}
-
-git_check_branch () {
-  git ls-remote --heads --sort="v:refname" https://github.com/$1/$2.git 2>/dev/null | perl -ne 'print if /refs\/heads\/(.+)+$/' | tail -n1 | sed 's@^.*refs/heads/@@'
-}
+source "$(dirname $0)/git-tags"
 
 set -ex
 
