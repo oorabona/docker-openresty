@@ -329,11 +329,7 @@ FROM openresty-${RESTY_FLAVOR} AS openresty
 #
 FROM base
 
-COPY --from=openresty /usr/local/lib /usr/local/lib
-COPY --from=openresty /usr/local/bin /usr/local/bin
-
-COPY --from=openresty /usr/local/openresty /usr/local/openresty
-COPY --from=openresty /usr/local/modsecurity* /usr/local/modsecurity
+COPY --from=openresty /usr/local/ /usr/local/
 
 RUN  mkdir -p /var/run/openresty \
   && ln -sf /dev/stdout /usr/local/openresty/nginx/logs/access.log \
