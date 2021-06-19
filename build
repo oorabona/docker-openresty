@@ -77,11 +77,14 @@ do
   do
     TAG_LATEST=''
     if [[ "$VERSION" == "latest" ]]; then
-      TAG_LATEST="-t oorabona/openresty-${flavor}-${os}:latest"
+      TAG_LATEST="-t oorabona/openresty-${flavor}:latest-${os}"
+      if [[ "$os" == "alpine" ]]; then
+        TAG_LATEST="${TAG_LATEST} -t oorabona/openresty-${flavor}:latest"
+      fi
     fi
 
     echo "Building image '$flavor' ..."
-    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --build-arg RESTY_FLAVOR=${flavor} --platform=${PLATFORMS} -f ${os}.dockerfile -t oorabona/openresty-${flavor}-${os}:${TAG} ${TAG_LATEST} .
+    docker buildx build --push --build-arg RESTY_J=${NPROC} --build-arg RESTY_VERSION=${TAG} --build-arg RESTY_FLAVOR=${flavor} --platform=${PLATFORMS} -f ${os}.dockerfile -t oorabona/openresty-${flavor}:${TAG}-${os} ${TAG_LATEST} .
   done
 
 done
