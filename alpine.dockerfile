@@ -84,6 +84,9 @@ RUN  curl -fSL https://ftp.pcre.org/pub/pcre/pcre-${RESTY_PCRE_VERSION}.tar.gz -
   && make -j${RESTY_J} \
   && make -j${RESTY_J} install
 
+RUN  git clone --recursive https://github.com/google/ngx_brotli.git \
+  && git clone --recursive https://github.com/leev/ngx_http_geoip2_module.git
+
 #
 # Build OpenResty 'basic' flavor
 #
@@ -122,7 +125,10 @@ ARG RESTY_CONFIG_OPTIONS="\
     --with-stream_realip_module \
     --with-threads \
     "
-ARG RESTY_CONFIG_OPTIONS_MORE="--add-module=/tmp/ngx_brotli"
+ARG RESTY_CONFIG_OPTIONS_MORE="\
+  --add-module=/tmp/ngx_brotli \
+  --add-dynamic-module=/tmp/ngx_http_geoip2_module \
+  "
 ARG RESTY_LUAJIT_OPTIONS="--with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT'"
 ARG RESTY_ADD_PACKAGE_BUILDDEPS=""
 ARG RESTY_ADD_PACKAGE_RUNDEPS=""
@@ -139,8 +145,6 @@ ARG _RESTY_CONFIG_DEPS="--with-pcre \
 ARG LUAROCKS_VERSION="3.3.1"
 
 ARG RESTY_J="4"
-
-RUN  git clone --recursive https://github.com/google/ngx_brotli.git
 
 RUN  curl -fSL https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o - | tar xzf - \
   && cd /tmp/openresty-${RESTY_VERSION} \
@@ -193,7 +197,11 @@ ARG RESTY_CONFIG_OPTIONS="\
     --with-stream_realip_module \
     --with-threads \
     "
-ARG RESTY_CONFIG_OPTIONS_MORE="--add-module=/tmp/ngx_brotli"
+
+ARG RESTY_CONFIG_OPTIONS_MORE="\
+  --add-module=/tmp/ngx_brotli \
+  --add-dynamic-module=/tmp/ngx_http_geoip2_module \
+  "
 ARG RESTY_LUAJIT_OPTIONS="--with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT'"
 ARG RESTY_ADD_PACKAGE_BUILDDEPS=""
 ARG RESTY_ADD_PACKAGE_RUNDEPS=""
@@ -210,8 +218,6 @@ ARG _RESTY_CONFIG_DEPS="--with-pcre \
 ARG LUAROCKS_VERSION="3.3.1"
 
 ARG RESTY_J="4"
-
-RUN  git clone --recursive https://github.com/google/ngx_brotli.git
 
 RUN  curl -fSL https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o - | tar xzf - \
   && curl -fSL https://github.com/chobits/ngx_http_proxy_connect_module/archive/master.tar.gz -o ngx_http_proxy_connect_module.tar.gz \
@@ -270,7 +276,11 @@ ARG RESTY_CONFIG_OPTIONS="\
     --with-stream_realip_module \
     --with-threads \
     "
-ARG RESTY_CONFIG_OPTIONS_MORE="--add-module=/tmp/ngx_brotli"
+
+ARG RESTY_CONFIG_OPTIONS_MORE="\
+  --add-module=/tmp/ngx_brotli \
+  --add-dynamic-module=/tmp/ngx_http_geoip2_module \
+  "
 ARG RESTY_LUAJIT_OPTIONS="--with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT'"
 ARG RESTY_ADD_PACKAGE_BUILDDEPS=""
 ARG RESTY_ADD_PACKAGE_RUNDEPS=""
@@ -287,8 +297,6 @@ ARG _RESTY_CONFIG_DEPS="--with-pcre \
 ARG LUAROCKS_VERSION="3.3.1"
 
 ARG RESTY_J="4"
-
-RUN  git clone --recursive https://github.com/google/ngx_brotli.git
 
 RUN  git clone https://github.com/SpiderLabs/ModSecurity \
   && cd ModSecurity \
