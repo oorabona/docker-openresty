@@ -312,14 +312,14 @@ FROM base
 ARG LUAROCKS_VERSION="3.3.1"
 ARG RESTY_J="4"
 
+COPY --from=openresty /usr/local/ /usr/local/
+
 RUN  curl -fSL https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz -o - | tar zxf - \
   && cd /tmp/luarocks-${LUAROCKS_VERSION} \
   && export PATH=$PATH:/usr/local/openresty/luajit/bin:/usr/local/openresty/nginx/sbin:/usr/local/openresty/bin \
   && ./configure \
   && make -j${RESTY_J} \
   && make -j${RESTY_J} install
-
-COPY --from=openresty /usr/local/ /usr/local/
 
 RUN  mkdir -p /var/run/openresty \
   && ln -sf /dev/stdout /usr/local/openresty/nginx/logs/access.log \
