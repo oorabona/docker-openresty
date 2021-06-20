@@ -142,9 +142,6 @@ ARG _RESTY_CONFIG_DEPS="--with-pcre \
     --with-ld-opt='-L/usr/local/openresty/pcre/lib -L/usr/local/openresty/openssl/lib -Wl,-rpath,/usr/local/openresty/pcre/lib:/usr/local/openresty/openssl/lib' \
     "
 
-# For Luarocks
-ARG LUAROCKS_VERSION="3.3.1"
-
 ARG RESTY_J="4"
 
 RUN  curl -fSL https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o - | tar xzf - \
@@ -207,9 +204,6 @@ ARG _RESTY_CONFIG_DEPS="--with-pcre \
     --with-cc-opt='-DNGX_LUA_ABORT_AT_PANIC -I/usr/local/openresty/pcre/include -I/usr/local/openresty/openssl/include' \
     --with-ld-opt='-L/usr/local/openresty/pcre/lib -L/usr/local/openresty/openssl/lib -Wl,-rpath,/usr/local/openresty/pcre/lib:/usr/local/openresty/openssl/lib' \
     "
-
-# For Luarocks
-ARG LUAROCKS_VERSION="3.3.1"
 
 ARG RESTY_J="4"
 
@@ -280,9 +274,6 @@ ARG _RESTY_CONFIG_DEPS="--with-pcre \
     --with-ld-opt='-L/usr/local/openresty/pcre/lib -L/usr/local/openresty/openssl/lib -Wl,-rpath,/usr/local/openresty/pcre/lib:/usr/local/openresty/openssl/lib' \
     "
 
-# For Luarocks
-ARG LUAROCKS_VERSION="3.3.1"
-
 ARG RESTY_J="4"
 
 RUN  git clone https://github.com/SpiderLabs/ModSecurity \
@@ -316,6 +307,10 @@ FROM openresty-${RESTY_FLAVOR} AS openresty
 # Build final image
 #
 FROM base
+
+# For Luarocks
+ARG LUAROCKS_VERSION="3.3.1"
+ARG RESTY_J="4"
 
 RUN  curl -fSL https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz -o - | tar zxf - \
   && cd /tmp/luarocks-${LUAROCKS_VERSION} \
