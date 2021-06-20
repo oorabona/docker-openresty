@@ -53,6 +53,7 @@ RUN apk add --no-cache --virtual .build-deps \
     readline-dev \
     zlib-dev \
     linux-headers \
+    libmaxminddb-dev \
     ${RESTY_ADD_PACKAGE_BUILDDEPS}
 
 RUN  curl -fSL "${RESTY_OPENSSL_URL_BASE}/openssl-${RESTY_OPENSSL_VERSION}.tar.gz" -o - | tar xzf - \
