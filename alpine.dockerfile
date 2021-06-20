@@ -153,13 +153,6 @@ RUN  curl -fSL https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz 
   && make -j${RESTY_J} \
   && make -j${RESTY_J} install
 
-RUN  curl -fSL https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz -o - | tar zxf - \
-  && cd /tmp/luarocks-${LUAROCKS_VERSION} \
-  && export PATH=$PATH:/usr/local/openresty/luajit/bin:/usr/local/openresty/nginx/sbin:/usr/local/openresty/bin \
-  && ./configure \
-  && make -j${RESTY_J} \
-  && make -j${RESTY_J} install
-
 #
 # Build OpenResty 'connect' flavor
 #
@@ -229,13 +222,6 @@ RUN  curl -fSL https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz 
   && cd build/nginx-* \
   && patch -p 1 < /tmp/ngx_http_proxy_connect_module-master/patch/proxy_connect_rewrite_1018.patch \
   && cd /tmp/openresty-${RESTY_VERSION} \
-  && make -j${RESTY_J} \
-  && make -j${RESTY_J} install
-
-RUN  curl -fSL https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz -o - | tar zxf - \
-  && cd /tmp/luarocks-${LUAROCKS_VERSION} \
-  && export PATH=$PATH:/usr/local/openresty/luajit/bin:/usr/local/openresty/nginx/sbin:/usr/local/openresty/bin \
-  && ./configure \
   && make -j${RESTY_J} \
   && make -j${RESTY_J} install
 
@@ -321,13 +307,6 @@ RUN  export MODSECURITY_INC="/tmp/ModSecurity/headers/" \
   && make -j${RESTY_J} \
   && make -j${RESTY_J} install
 
-RUN  curl -fSL https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz -o - | tar zxf - \
-  && cd /tmp/luarocks-${LUAROCKS_VERSION} \
-  && export PATH=$PATH:/usr/local/openresty/luajit/bin:/usr/local/openresty/nginx/sbin:/usr/local/openresty/bin \
-  && ./configure \
-  && make -j${RESTY_J} \
-  && make -j${RESTY_J} install
-
 #
 # A bit hacky but that's the way to build conditionally
 #
@@ -337,6 +316,13 @@ FROM openresty-${RESTY_FLAVOR} AS openresty
 # Build final image
 #
 FROM base
+
+RUN  curl -fSL https://luarocks.org/releases/luarocks-${LUAROCKS_VERSION}.tar.gz -o - | tar zxf - \
+  && cd /tmp/luarocks-${LUAROCKS_VERSION} \
+  && export PATH=$PATH:/usr/local/openresty/luajit/bin:/usr/local/openresty/nginx/sbin:/usr/local/openresty/bin \
+  && ./configure \
+  && make -j${RESTY_J} \
+  && make -j${RESTY_J} install
 
 COPY --from=openresty /usr/local/ /usr/local/
 
