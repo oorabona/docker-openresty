@@ -257,6 +257,7 @@ ARG RESTY_CONFIG_OPTIONS="\
 ARG RESTY_CONFIG_OPTIONS_MORE="\
   --add-module=/tmp/ngx_brotli \
   --add-dynamic-module=/tmp/ngx_http_geoip2_module \
+  --add-module=/tmp/ModSecurity-nginx \
   "
 ARG RESTY_LUAJIT_OPTIONS="--with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT'"
 
@@ -284,7 +285,6 @@ RUN  export MODSECURITY_INC="/tmp/ModSecurity/headers/" \
   && git clone https://github.com/SpiderLabs/ModSecurity-nginx \
   && curl -fSL https://openresty.org/download/openresty-${RESTY_VERSION}.tar.gz -o - | tar zxf - \
   && cd /tmp/openresty-${RESTY_VERSION} \
-  && export RESTY_CONFIG_OPTIONS="--add-module=/tmp/ModSecurity-nginx ${RESTY_CONFIG_OPTIONS}" \
   && eval ./configure -j${RESTY_J} ${_RESTY_CONFIG_DEPS} ${RESTY_CONFIG_OPTIONS} ${RESTY_CONFIG_OPTIONS_MORE} ${RESTY_LUAJIT_OPTIONS} \
   && cd /tmp/openresty-${RESTY_VERSION} \
   && make -j${RESTY_J} \
