@@ -7,6 +7,8 @@ ARG RESTY_FLAVOR="basic"
 
 FROM ${RESTY_IMAGE_BASE}:${RESTY_IMAGE_TAG} AS base
 
+ARG RESTY_ADD_PACKAGE_RUNDEPS=""
+
 RUN apk add --no-cache \
     git \
     build-base \
@@ -36,6 +38,8 @@ ARG RESTY_OPENSSL_PATCH_VERSION="1.1.1f"
 ARG RESTY_OPENSSL_URL_BASE="https://www.openssl.org/source"
 ARG RESTY_PCRE_VERSION="8.44"
 ARG RESTY_J="4"
+
+ARG RESTY_ADD_PACKAGE_BUILDDEPS=""
 
 RUN apk add --no-cache --virtual .build-deps \
     flex bison \
@@ -131,10 +135,6 @@ ARG RESTY_CONFIG_OPTIONS_MORE="\
   --add-dynamic-module=/tmp/ngx_http_geoip2_module \
   "
 ARG RESTY_LUAJIT_OPTIONS="--with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT'"
-ARG RESTY_ADD_PACKAGE_BUILDDEPS=""
-ARG RESTY_ADD_PACKAGE_RUNDEPS=""
-ARG RESTY_EVAL_PRE_CONFIGURE=""
-ARG RESTY_EVAL_POST_MAKE=""
 
 # These are not intended to be user-specified
 ARG _RESTY_CONFIG_DEPS="--with-pcre \
@@ -194,10 +194,6 @@ ARG RESTY_CONFIG_OPTIONS_MORE="\
   --add-dynamic-module=/tmp/ngx_http_geoip2_module \
   "
 ARG RESTY_LUAJIT_OPTIONS="--with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT'"
-ARG RESTY_ADD_PACKAGE_BUILDDEPS=""
-ARG RESTY_ADD_PACKAGE_RUNDEPS=""
-ARG RESTY_EVAL_PRE_CONFIGURE=""
-ARG RESTY_EVAL_POST_MAKE=""
 
 # These are not intended to be user-specified
 ARG _RESTY_CONFIG_DEPS="--with-pcre \
@@ -263,10 +259,6 @@ ARG RESTY_CONFIG_OPTIONS_MORE="\
   --add-dynamic-module=/tmp/ngx_http_geoip2_module \
   "
 ARG RESTY_LUAJIT_OPTIONS="--with-luajit-xcflags='-DLUAJIT_NUMMODE=2 -DLUAJIT_ENABLE_LUA52COMPAT'"
-ARG RESTY_ADD_PACKAGE_BUILDDEPS=""
-ARG RESTY_ADD_PACKAGE_RUNDEPS=""
-ARG RESTY_EVAL_PRE_CONFIGURE=""
-ARG RESTY_EVAL_POST_MAKE=""
 
 # These are not intended to be user-specified
 ARG _RESTY_CONFIG_DEPS="--with-pcre \
@@ -338,8 +330,6 @@ LABEL resty_config_options_more="${RESTY_CONFIG_OPTIONS_MORE}"
 LABEL resty_config_deps="${_RESTY_CONFIG_DEPS}"
 LABEL resty_add_package_builddeps="${RESTY_ADD_PACKAGE_BUILDDEPS}"
 LABEL resty_add_package_rundeps="${RESTY_ADD_PACKAGE_RUNDEPS}"
-LABEL resty_eval_pre_configure="${RESTY_EVAL_PRE_CONFIGURE}"
-LABEL resty_eval_post_make="${RESTY_EVAL_POST_MAKE}"
 LABEL luarocks_version="${LUAROCKS_VERSION}"
 
 # Add additional binaries into PATH for convenience
