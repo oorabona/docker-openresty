@@ -4,16 +4,16 @@ name: Main CI
 
 # Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
+  # Triggers the workflow on push or pull request events but only for the main branch, do not trigger if markdown documents changed.
   push:
     branches: [ main ]
     paths:
-      - alpine/*
+      - '!**.md'
 
   pull_request:
     branches: [ main ]
     paths:
-      - alpine/*
+      - '!**.md'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
 
     strategy:
       matrix:
-        flavor: [ openresty, openresty-connect ]
+        flavor: [ basic, connect, modsecurity ]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
